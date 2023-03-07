@@ -1,0 +1,49 @@
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<div class="container p-5">
+    <form [formGroup]="storybook" style="margin-left: 100px;">
+        <label for="story" style="font-size: large; font-weight: 800;">Story:-</label>
+        <input type="text" placeholder="Add Your Story" formControlName="task" class="story" /><br />
+
+        <label for="date" style="font-size: large; font-weight: 800;">Date:-</label>
+        <input type="date" formControlName="date" class="date" /><br />
+
+        <label for="image" style="font-size: large; font-weight: 800;">Image:-</label>
+        <input type='file' formControlName="image" />
+        <img [src]="url" *ngIf="format==='image' && url" height="200"> <br />
+        <video [src]="url" *ngIf="format==='video' && url" height="200" controls></video> <br />
+
+        <button name="button" id="submit" type="button" value="Submit" (click)="onSubmit()"
+            style="cursor:pointer; font-size: x-large;" class="btn btn-sub btn-primari" [disabled]="!storybook.valid"><i
+                class='fa fa-save'></i></button>
+    </form>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col-2">Story</th>
+                <th scope="col-2">Date</th>
+                <th scope="col-2">Image</th>
+                <!-- <th scope="col">Action</th> -->
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let story of story">
+                <td class="emtask">{{story.task}}</td>
+                <td class="emtask">{{story.date | date:"dd/MM/yyyy"}}</td>
+                <td class="image"><button type='files' (click)="open(story.target.files)" style="cursor:pointer;" class="imgbut">{{story.image}}</button></td>
+                <!-- <td class="emtask">
+                <button style="cursor:pointer" class="btn btn-md btn-primari" (click)="editRow(story, index)"><i
+              class='fa fa-edit' style="font-size: larger;"></i></button>
+                  
+                <button (click)="deleteRow(index)" style="cursor:pointer" class="btn btn-md btn-denger"><i class='fa fa-trash'
+              style="font-size: larger;"></i></button>
+            </td> -->
+            </tr>
+        </tbody>
+    </table>
+</div>
