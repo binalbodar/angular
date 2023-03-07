@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,17 +8,20 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 export class AppComponent {
   title = 'storybook';
+  format: undefined;
+  url: undefined;
 
   storybook = new FormGroup({
     task: new FormControl('', [Validators.required]),
     date: new FormControl('', [Validators.required]),
     image: new FormControl('', [Validators.required]),
   })
-  url: undefined;
-  format: undefined;
+
+  constructor(public _d: DomSanitizer) { }
+
   imgsrc: string | undefined;
-  file:undefined;
-  files:undefined;
+  file: undefined;
+  // files: undefined;
 
   onSubmit() {
     let value = this.storybook.value
@@ -29,11 +33,11 @@ export class AppComponent {
     this.storybook.reset();
   };
 
-  open(e: { srcElement: { files: any; }; }){
-    const file = e.srcElement.files[0]; 
+  open(story: { srcElement: { story: any; }; }) {
+    const file = story.srcElement.story[0];
     this.imgsrc = window.URL.createObjectURL(file);
   }
 
   story: any = []
-  
+
 }
