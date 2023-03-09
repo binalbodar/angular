@@ -5,44 +5,52 @@
 <div class="container p-5">
     <form [formGroup]="storybook" style="margin-left: 100px;">
         <label for="story" style="font-size: large; font-weight: 800;">Story:-</label>
-        <input type="text" placeholder="Add Your Story" formControlName="task" class="story" /><br />
+        <input type="text" placeholder="Add Your Story" formControlName="story" class="story" /><br />
 
         <label for="date" style="font-size: large; font-weight: 800;">Date:-</label>
         <input type="date" formControlName="date" class="date" /><br />
 
+        <div [innerHtml]='msg'></div>
         <label for="image" style="font-size: large; font-weight: 800;">Image:-</label>
-        <input type='file' formControlName="image" />
-        <img [src]="url" *ngIf="format==='image' && url" height="200"> <br />
-        <video [src]="url" *ngIf="format==='video' && url" height="200" controls></video> <br />
+        <input type='file' formControlName="image" class="image" (change)="selectFile(story)" /><br />
 
         <button name="button" id="submit" type="button" value="Submit" (click)="onSubmit()"
-            style="cursor:pointer; font-size: x-large;" class="btn btn-sub btn-primari" [disabled]="!storybook.valid"><i
-                class='fa fa-save'></i></button>
+            style="cursor:pointer; font-size: x-large;" class="btn btn-sub btn-primari" [disabled]="!storybook.valid"
+            *ngIf="toDisplay"><i class='fa fa-save'></i></button>
+
+        <button name="button" id="update" type="button" value="Update" *ngIf="!toDisplay" (click)="onupdate()"
+            style="cursor:pointer; font-size: large;" class="btn btn-sub btn-primari"><i class="fa fa-pencil"
+                aria-hidden="true"></i></button>
     </form>
 
     <table class="table">
         <thead>
             <tr>
-                <th scope="col-2">Story</th>
-                <th scope="col-2">Date</th>
-                <th scope="col-2">Image</th>
-                <!-- <th scope="col">Action</th> -->
+                <th scope="col-4">Story</th>
+                <th scope="col-4">Date</th>
+                <th scope="col-4">Image</th>
+                <th scope="col-4">Action</th>
             </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let story of story">
-                <td class="emtask">{{story.task}}</td>
+            <tr *ngFor="let story of story; index as index">
+
+                <td class="emtask">{{story.story}}</td>
+
                 <td class="emtask">{{story.date | date:"dd/MM/yyyy"}}</td>
-                <td class="emtask"><button (click)="open(story)" style="cursor:pointer;"
-                        class="imgbut">{{story.image}}</button></td>
-                <!-- <td class="emtask">
+
+                <td class="emtask"><button (click)="upload()" class="imgbut"
+                        style="cursor:pointer">{{story.image}}</button></td>
+
+                <td class="emtask">
+
                     <button style="cursor:pointer" class="btn btn-md btn-primari" (click)="editRow(story, index)"><i
-                        class='fa fa-edit' style="font-size: larger;"></i></button>
-                        
-                    <button (click)="deleteRow(index)" style="cursor:pointer" class="btn btn-md btn-denger"><i class='fa fa-trash'
-                        style="font-size: larger;"></i></button>
-                </td> -->
+                            class='fa fa-edit' style="font-size: larger;"></i></button>
+
+                    <button (click)="deleteRow(index)" style="cursor:pointer" class="btn btn-md btn-denger"><i
+                            class='fa fa-trash' style="font-size: larger;"></i></button>
+                </td>
             </tr>
         </tbody>
     </table>
