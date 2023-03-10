@@ -1,14 +1,16 @@
-import { HttpResponse } from '@angular/common/http';
 import { FileService } from './file.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  
+export class AppComponent implements OnInit {
+
+  ngOnInit(): void {
+  }
+
   title = 'storybook';
 
   storybook = new FormGroup({
@@ -17,17 +19,12 @@ export class AppComponent {
     image: new FormControl('', [Validators.required]),
   })
 
-  format: undefined;
-  url: undefined;
-  fileToUpload: any;
-  imageUrl: any;
-  currentFile: any | File;
-  imgsrc: string | undefined;
   file: any;
   files: any;
-  selectedFiles: any | FileList;
   msg: {} | null | undefined;
-  item: null | undefined;
+  value: undefined;
+  shortLink: string = '';
+  loading: boolean | undefined;
 
   constructor(private fileService: FileService) { }
 
@@ -45,20 +42,22 @@ export class AppComponent {
     this.storybook.reset();
   };
 
-  selectFile(story: { target: { files: any; }; }) {
-    this.story = story.target.files;
+  onChange(story: { target: { story: any[]; }; }) {
+    console.log("Add The Image, Pdf, File, etc.......");
+    this.story = story.target.story[0];
   }
 
-  upload() {
-    debugger
-    this.storybook = this.selectedFiles.item(0);
-    this.fileService.uploadFile(this.currentFile).subscribe(response => {
-      this.story.value = '';
-      if (response instanceof HttpResponse) {
-        this.msg = response.body;
-        console.log(response.body);
-      }
-    });
+  onUpload() {
+    if (this.story) {
+      this.loading = !this.loading;
+      console.log(this.story);
+      this.fileService.upload(this.story).subscribe((story: any) => {
+        if (typeof story === 'object') {
+          this.shortLink = story.link;
+          this.loading = false;
+        }
+      });
+    }
   }
 
   edit: any = '';
@@ -84,25 +83,3 @@ export class AppComponent {
   story: any = []
 
 }
-
-
-
-  // handleFileInput(file: FileList) {
-  //   this.fileToUpload = file.item(0);
-
-  //   //Show image preview
-  //   let reader = new FileReader();
-  //   reader.onload = (event: any) => {
-  //     this.imageUrl = event.target.result;
-  //   }
-  //   reader.readAsDataURL(this.fileToUpload);
-  // }
-
-  // onChange(story: { target: { files: (string | undefined)[]; }; }) {
-  //   this.files = story.target.files[0];
-  // }
-
-  // open(story: { srcElement: { files: any[]; }; }) {
-  //   const file = story.srcElement.files[0];
-  //   this.imgsrc = window.URL.createObjectURL(file);
-  // }

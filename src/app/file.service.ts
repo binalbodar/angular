@@ -5,18 +5,26 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
+
 export class FileService {
+
+  story: any | undefined;
+
+  baseApiUrl = 'https://file.io';
+  User: any;
 
   constructor(private http: HttpClient) { }
 
-  uploadFile(file: File): Observable<HttpEvent<{}>> {
-    const formdata: FormData = new FormData();
-    formdata.append('file', file);
-    const req = new HttpRequest('POST', '<Server URL of the file upload>', formdata, {
-      reportProgress: true,
-      responseType: 'text'
-    });
+  upload(file: any): Observable<any> {
+    const storybook = new FormData();
+  
+    storybook.append('story', file, file.name);
 
-    return this.http.request(req);
+    return this.http.post(this.baseApiUrl, storybook);
   }
 }
+
+// function User(this: any) {
+//   this.FormData = 'Blob';
+//   this.append = 'Blob';
+// }
