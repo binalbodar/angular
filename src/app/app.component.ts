@@ -1,15 +1,13 @@
 import { FileService } from './file.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-
-  ngOnInit(): void {
-  }
 
   title = 'storybook';
 
@@ -19,14 +17,12 @@ export class AppComponent implements OnInit {
     image: new FormControl('', [Validators.required]),
   })
 
-  file: any;
-  files: any;
-  msg: {} | null | undefined;
-  value: undefined;
-  shortLink: string = '';
-  loading: boolean | undefined;
+  fileUrl: any;
+  imageUrl: any;
 
-  constructor(private fileService: FileService) { }
+  // constructor(private fileService: FileService) { }
+
+  constructor(private sanitizer: DomSanitizer) { }
 
   deleteRow(item: any) {
     this.story.splice(item, 1);
@@ -42,22 +38,29 @@ export class AppComponent implements OnInit {
     this.storybook.reset();
   };
 
-  onChange(story: { target: { story: any[]; }; }) {
-    console.log("Add The Image, Pdf, File, etc.......");
-    this.story = story.target.story[0];
-  }
+  // onChange(story: { target: { storybook: any[]; }; }) {
+  //   console.log("Add The Image, Pdf, File, etc.......");
+  //   this.story = story.target.storybook[0];
+  // }
 
-  onUpload() {
-    if (this.story) {
-      this.loading = !this.loading;
-      console.log(this.story);
-      this.fileService.upload(this.story).subscribe((story: any) => {
-        if (typeof story === 'object') {
-          this.shortLink = story.link;
-          this.loading = false;
-        }
-      });
-    }
+  // onUpload() {
+  //   if (this.story) {
+  //     this.loading = !this.loading;
+  //     console.log(this.story);
+  //     this.fileService.upload(this.story).subscribe((story: any) => {
+  //       if (typeof this.story === 'object') {
+  //         this.shortLink = story.link;
+
+  //         this.loading = false;
+  //       }
+  //     });
+  //   }
+  // }
+
+  ngOnInit() {
+    const data = this.story.image;
+    const blob = new Blob([data], { type: this.story.image });
+    this.imageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
   }
 
   edit: any = '';

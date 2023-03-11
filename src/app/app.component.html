@@ -10,9 +10,8 @@
         <label for="date" style="font-size: large; font-weight: 800;">Date:-</label>
         <input type="date" formControlName="date" class="date" /><br />
 
-        <div [innerHtml]='msg'></div>
         <label for="image" style="font-size: large; font-weight: 800;">Image:-</label>
-        <input type='file' id="file" formControlName="image" class="image" (change)="onChange(story)" /><br />
+        <input type='file' id="file" formControlName="image" class="image" /><br />
 
         <button name="button" id="submit" type="button" value="Submit" (click)="onSubmit()"
             style="cursor:pointer; font-size: x-large;" class="btn btn-sub btn-primari" [disabled]="!storybook.valid"
@@ -22,15 +21,6 @@
             style="cursor:pointer; font-size: large;" [disabled]="!storybook.valid" class="btn btn-sub btn-primari"><i
                 class="fa fa-pencil" aria-hidden="true"></i></button>
     </form>
-
-    <div class="container text-center jumbotron" *ngIf="shortLink">
-        <h5>Visit Here</h5>
-        <a href="{{ shortLink }}">{{ shortLink }}</a>
-    </div>
-
-    <div class="container" *ngIf="loading">
-        <h5>Loading ...</h5>
-    </div>
 
     <table class="table">
         <thead>
@@ -49,8 +39,9 @@
 
                 <td class="emtask">{{story.date | date:"dd/MM/yyyy"}}</td>
 
-                <td class="emtask"><button (click)="onUpload()" class="imgbut"
-                        style="cursor:pointer">{{story.image}}</button>
+                <td class="emtask"><a href="#" class="imgbut" style="cursor:pointer"
+                        download="Image.html">{{story.image}}</a>
+                    <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image">
                 </td>
 
                 <td class="emtask">
@@ -65,3 +56,8 @@
         </tbody>
     </table>
 </div>
+
+
+
+
+<!-- (change)="onChange(story)" -->

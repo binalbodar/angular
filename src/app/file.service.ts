@@ -12,19 +12,29 @@ export class FileService {
 
   baseApiUrl = 'https://file.io';
   User: any;
+  append: string | undefined;
+  fileService: any;
+  bypassSecurityTrustResourceUrl: any;
 
   constructor(private http: HttpClient) { }
 
+  // Blob!: {
+  //   User: any;
+  //   new(blobParts?: BlobPart[] | undefined, options?: BlobPropertyBag | undefined): Blob;
+  //   prototype: Blob;
+  // };
+
   upload(file: any): Observable<any> {
+    // debugger
     const storybook = new FormData();
-  
+
     storybook.append('story', file, file.name);
 
     return this.http.post(this.baseApiUrl, storybook);
   }
 }
 
-// function User(this: any) {
-//   this.FormData = 'Blob';
-//   this.append = 'Blob';
-// }
+function User(this: any) {
+  this.FormData = 'Blob';
+  this.append = 'Blob';
+}
