@@ -18,23 +18,9 @@ export class FileService {
 
   constructor(private http: HttpClient) { }
 
-  // Blob!: {
-  //   User: any;
-  //   new(blobParts?: BlobPart[] | undefined, options?: BlobPropertyBag | undefined): Blob;
-  //   prototype: Blob;
-  // };
-
   upload(file: any): Observable<any> {
-    // debugger
     const storybook = new FormData();
-
-    storybook.append('story', file, file.name);
-
+    Array.from(file).forEach((f:any)=> storybook.append('file',f))
     return this.http.post(this.baseApiUrl, storybook);
   }
-}
-
-function User(this: any) {
-  this.FormData = 'Blob';
-  this.append = 'Blob';
 }

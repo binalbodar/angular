@@ -10,8 +10,8 @@
         <label for="date" style="font-size: large; font-weight: 800;">Date:-</label>
         <input type="date" formControlName="date" class="date" /><br />
 
-        <label for="image" style="font-size: large; font-weight: 800;">Image:-</label>
-        <input type='file' id="file" formControlName="image" class="image" /><br />
+        <label for="file" style="font-size: large; font-weight: 800;">Image:-</label>
+        <input type='file' id="file" formControlName="shortLink" (change)="handleUploadImg($event)" class="image" /><br />
 
         <button name="button" id="submit" type="button" value="Submit" (click)="onSubmit()"
             style="cursor:pointer; font-size: x-large;" class="btn btn-sub btn-primari" [disabled]="!storybook.valid"
@@ -19,7 +19,7 @@
 
         <button name="button" id="update" type="button" value="Update" *ngIf="!toDisplay" (click)="onupdate()"
             style="cursor:pointer; font-size: large;" [disabled]="!storybook.valid" class="btn btn-sub btn-primari"><i
-                class="fa fa-pencil" aria-hidden="true"></i></button>
+                class='fa fa-edit' aria-hidden="true"></i></button>
     </form>
 
     <table class="table">
@@ -34,20 +34,26 @@
 
         <tbody>
             <tr *ngFor="let story of story; index as index">
-
                 <td class="emtask">{{story.story}}</td>
 
                 <td class="emtask">{{story.date | date:"dd/MM/yyyy"}}</td>
 
-                <td class="emtask"><a href="#" class="imgbut" style="cursor:pointer"
-                        download="Image.html">{{story.image}}</a>
-                    <img width="100%" *ngIf="imageUrl" [src]="imageUrl" class="image">
+                <td class="emtask">
+                    <a href="{{ shortLink }}" target="_blank">{{ shortLink }}</a>
+                    <!-- <a href="#" class="imgbut"
+                        style="cursor:pointer">{{story.image}}</a> -->
+                        <!-- <div class="container" *ngIf="loading">
+                            <h5>Loading ...</h5>
+                          </div> -->
+                    
+                        <!-- <div class="jumbotron" *ngIf="shortLink"> -->
+                            <!-- <h5>Visit Here</h5> -->
+                        <!-- </div> -->
                 </td>
-
                 <td class="emtask">
 
                     <button style="cursor:pointer" class="btn btn-md btn-primari" (click)="editRow(story, index)"><i
-                            class='fa fa-edit' style="font-size: larger;"></i></button>
+                            class="fa fa-pencil" style="font-size: larger;"></i></button>
 
                     <button (click)="deleteRow(index)" style="cursor:pointer" class="btn btn-md btn-denger"><i
                             class='fa fa-trash' style="font-size: larger;"></i></button>
@@ -55,6 +61,7 @@
             </tr>
         </tbody>
     </table>
+
 </div>
 
 

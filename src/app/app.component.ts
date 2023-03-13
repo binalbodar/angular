@@ -9,20 +9,22 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AppComponent implements OnInit {
 
+  ngOnInit() { }
+
   title = 'storybook';
 
   storybook = new FormGroup({
     story: new FormControl('', [Validators.required]),
     date: new FormControl('', [Validators.required]),
-    image: new FormControl('', [Validators.required]),
+    shortLink: new FormControl('', [Validators.required]),
   })
 
   fileUrl: any;
-  imageUrl: any;
+  image: any;
+  shortLink: string = '';
+  loading: boolean = false;
 
-  // constructor(private fileService: FileService) { }
-
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private fileService: FileService) { }
 
   deleteRow(item: any) {
     this.story.splice(item, 1);
@@ -37,6 +39,32 @@ export class AppComponent implements OnInit {
   clearForm() {
     this.storybook.reset();
   };
+
+  handleUploadImg(event: any) {
+    let files = event.target.files;
+    this.loading = !this.loading;
+    this.fileService.upload(files).subscribe((item: any) => {
+      console.log(item);
+      if (typeof item === 'object') {
+        this.shortLink = item.link;
+        this.loading = false;
+      }
+    })
+  }
+
+  // onUpload() {
+  //   if (this.file) {
+  //     this.loading = !this.loading;
+  //     console.log(this.file);
+  //     this.fileUploadService.upload(this.file).subscribe((event: any) => {
+  //       if (typeof event === 'object') {
+  //         // Short link via api response
+  //         this.shortLink = event.link;
+  //         this.loading = false; // Flag variable
+  //       }
+  //     });
+  //   }
+  // }
 
   // onChange(story: { target: { storybook: any[]; }; }) {
   //   console.log("Add The Image, Pdf, File, etc.......");
@@ -57,11 +85,11 @@ export class AppComponent implements OnInit {
   //   }
   // }
 
-  ngOnInit() {
-    const data = this.story.image;
-    const blob = new Blob([data], { type: this.story.image });
-    this.imageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-  }
+  // ngOnInit() {
+  //   const data = "hgfghfgfg";
+  //   const blob = new Blob([data], { type: 'application/octet-stream' });
+  //   this.image = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+  // }
 
   edit: any = '';
   toDisplay = true;
@@ -72,14 +100,14 @@ export class AppComponent implements OnInit {
     this.storybook.patchValue({
       story: story.story,
       date: story.date,
-      image: story.image
+      shortLink: story.shortLink
     })
   }
 
   onupdate() {
     let value = this.storybook.value
     this.toDisplay = !this.toDisplay;
-    this.story[this.edit] = { story: value.story, date: value.date, image: value.image };
+    this.story[this.edit] = { story: value.story, date: value.date, shortLink: value.shortLink };
     this.clearForm();
   }
 
